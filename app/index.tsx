@@ -54,6 +54,7 @@ export default function Index() {
   const [editId, setEditId] = useState<number | null>(null);
   const [showInput, setShowInput] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>("light");
+  const THEME_KEY = 'theme';
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [scheduledTime, setScheduledTime] = useState<Date | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -64,6 +65,26 @@ export default function Index() {
   useEffect(() => {
     Notifications.requestPermissionsAsync();
   }, []);
+
+  // Load theme from AsyncStorage on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const savedTheme = await AsyncStorage.getItem(THEME_KEY);
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          setTheme(savedTheme);
+        }
+      } catch {}
+    })();
+  }, []);
+  // Persist theme changes
+  const handleThemeToggle = async () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    try {
+      await AsyncStorage.setItem(THEME_KEY, newTheme);
+    } catch {}
+  };
 
   // Load todos from AsyncStorage on mount
   useEffect(() => {
@@ -255,7 +276,7 @@ export default function Index() {
             <Text style={{fontSize: 13, color: currentTheme.faded, marginTop: 2}}>Your Smart Todo & Reminder App</Text>
           </View>
           {/* Theme Toggle Button */}
-          <TouchableOpacity onPress={() => setTheme(theme === 'light' ? 'dark' : 'light')} style={{marginLeft: 10}}>
+          <TouchableOpacity onPress={handleThemeToggle} style={{marginLeft: 10}}>
             <Ionicons name={theme === 'light' ? 'moon' : 'sunny'} size={26} color={currentTheme.accent} />
           </TouchableOpacity>
         </View>
