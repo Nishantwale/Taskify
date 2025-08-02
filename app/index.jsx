@@ -7,21 +7,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, FlatList, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-type Todo = {
-  id: number;
-  title: string;
-  isDone: boolean;
-  scheduledTime?: number; // timestamp in ms
-  notificationId?: string;
-};
-
 export default function Index() {
   // Toast state and component (must be inside component)
-  const [toast, setToast] = useState<{visible: boolean, message: string, type: 'success'|'error'}>({visible: false, message: '', type: 'success'});
+  const [toast, setToast] = useState({visible: false, message: '', type: 'success'});
   const toastAnim = useRef(new Animated.Value(0)).current;
-  const editInputRef = useRef<TextInput>(null);
+  const editInputRef = useRef(null);
 
-  const showToast = (message: string, type: 'success'|'error' = 'success') => {
+  const showToast = (message, type = 'success') => {
     setToast({visible: true, message, type});
     Animated.timing(toastAnim, {
       toValue: 1,
@@ -39,24 +31,24 @@ export default function Index() {
   };
 
   // Handle time picker change (must be inside component)
-  const onTimeChange = (event: any, selectedDate?: Date) => {
+  const onTimeChange = (event, selectedDate) => {
     setShowTimePicker(false);
     if (selectedDate) {
       setScheduledTime(selectedDate);
     }
   };
   const TODOS_KEY = 'todos';
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [search, setSearch] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [editTask, setEditTask] = useState("");
-  const [editId, setEditId] = useState<number | null>(null);
+  const [editId, setEditId] = useState(null);
   const [showInput, setShowInput] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>("light");
+  const [theme, setTheme] = useState("light");
   const THEME_KEY = 'theme';
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [scheduledTime, setScheduledTime] = useState<Date | null>(null);
+  const [scheduledTime, setScheduledTime] = useState(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const modalScale = useRef(new Animated.Value(0.8)).current;
   const modalOpacity = useRef(new Animated.Value(0)).current;
@@ -74,7 +66,7 @@ export default function Index() {
         if (savedTheme === 'light' || savedTheme === 'dark') {
           setTheme(savedTheme);
         }
-      } catch {}
+      } catch (e) {}
     })();
   }, []);
   // Persist theme changes
@@ -83,7 +75,7 @@ export default function Index() {
     setTheme(newTheme);
     try {
       await AsyncStorage.setItem(THEME_KEY, newTheme);
-    } catch {}
+    } catch (e) {}
   };
 
   // Load todos from AsyncStorage on mount
@@ -92,7 +84,7 @@ export default function Index() {
       try {
         const saved = await AsyncStorage.getItem(TODOS_KEY);
         if (saved) setTodos(JSON.parse(saved));
-      } catch {}
+      } catch (e) {}
     })();
   }, []);
 
@@ -109,8 +101,8 @@ export default function Index() {
       showToast("A task with this name already exists.", 'error');
       return;
     }
-    let notificationId: string | undefined = undefined;
-    let scheduledTimestamp: number | undefined = undefined;
+    let notificationId = undefined;
+    let scheduledTimestamp = undefined;
     if (scheduledTime) {
       scheduledTimestamp = scheduledTime.getTime();
       if (scheduledTimestamp > Date.now()) {
@@ -121,7 +113,7 @@ export default function Index() {
             body: trimmed,
             sound: true,
           },
-          trigger: new Date(scheduledTimestamp) as any
+          trigger: new Date(scheduledTimestamp)
         });
         notificationId = id;
       }
@@ -136,18 +128,18 @@ export default function Index() {
     showToast("Task added!", 'success');
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id) => {
     const task = todos.find(t => t.id === id);
-    if (task?.notificationId) {
+    if (task && task.notificationId) {
       try {
         await Notifications.cancelScheduledNotificationAsync(task.notificationId);
-      } catch {}
+      } catch (e) {}
     }
     setTodos(prev => prev.filter(t => t.id !== id));
     showToast("Task deleted!", 'success');
   };
 
-  const handleToggle = async (id: number) => {
+  const handleToggle = async (id) => {
     setTodos(prev => prev.map(t => {
       if (t.id === id) {
         if (!t.isDone) {
@@ -163,7 +155,7 @@ export default function Index() {
     }));
   };
 
-  const handleEdit = (id: number, title: string) => {
+  const handleEdit = (id, title) => {
     setEditId(id);
     setEditTask(title);
     setModalVisible(true);
@@ -185,7 +177,7 @@ export default function Index() {
         })
       ]).start();
       setTimeout(() => {
-        editInputRef.current?.focus();
+        if (editInputRef.current) editInputRef.current.focus();
       }, 200);
     } else {
       modalScale.setValue(0.8);
