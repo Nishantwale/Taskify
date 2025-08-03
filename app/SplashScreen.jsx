@@ -18,10 +18,7 @@ export default function SplashScreen({ onFinish }) {
         useNativeDriver: true,
       })
     ]).start();
-    const timer = setTimeout(() => {
-      if (onFinish) onFinish();
-    }, 3000);
-    return () => clearTimeout(timer);
+    // Remove timer, let Lottie animation control splash duration
   }, []);
 
   return (
@@ -33,12 +30,15 @@ export default function SplashScreen({ onFinish }) {
         transform: [{ scale: scaleAnim }],
       }}>
         <LottieView
-        source={require('../assets/lottie/Completing-Tasks.json')}
-        autoPlay
-        loop={false}
-        style={{ width: 300, height: 300, marginBottom: 40 }}
+          source={require('../assets/lottie/Completing-Tasks.json')}
+          autoPlay
+          loop={false}
+          style={{ width: 300, height: 300, marginBottom: 40 }}
+          onAnimationFinish={() => {
+            if (onFinish) onFinish();
+          }}
         />
-        <Text style={styles.text}>Developed By - Nishant Wale</Text>
+        <Text style={styles.text}>Design & Developed By - Nishant Wale</Text>
       </Animated.View>
     </View>
   );
