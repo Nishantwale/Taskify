@@ -3,11 +3,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Checkbox } from 'expo-checkbox';
 import * as Notifications from 'expo-notifications';
+import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, FlatList, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import SplashScreen from './SplashScreen';
 
 export default function Index() {
+  const [showSplash, setShowSplash] = useState(true);
   // Toast state and component (must be inside component)
   const [toast, setToast] = useState({visible: false, message: '', type: 'success'});
   const toastAnim = useRef(new Animated.Value(0)).current;
@@ -255,8 +258,12 @@ export default function Index() {
   };
   const currentTheme = themes[theme];
 
+if (showSplash) {
+  return <SplashScreen onFinish={() => setShowSplash(false)} />;
+} else {
   return (
     <SafeAreaView style={[styles.container, {backgroundColor: currentTheme.background}]}> 
+      <StatusBar style={theme === 'light' ? 'dark' : 'light'} animated />
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -272,6 +279,7 @@ export default function Index() {
             <Ionicons name={theme === 'light' ? 'moon' : 'sunny'} size={26} color={currentTheme.accent} />
           </TouchableOpacity>
         </View>
+        {/* Search Bar */}
         <View style={[styles.searchBar, {backgroundColor: currentTheme.card, shadowColor: currentTheme.text}]}> 
           <Ionicons name='search' size={24} color={currentTheme.faded}/>
           <TextInput
@@ -289,7 +297,7 @@ export default function Index() {
             keyExtractor={(item) => item.id.toString()}
             contentContainerStyle={{paddingBottom: 100}}
             renderItem={({item}) => {
-              const isLongTask = item.title.length > 7; // adjust threshold as needed
+              const isLongTask = item.title.length > 7;
               return (
                 <Animated.View style={[styles.todoCard, {backgroundColor: currentTheme.card, borderColor: currentTheme.border, shadowColor: currentTheme.text}]}> 
                   {isLongTask ? (
@@ -354,7 +362,6 @@ export default function Index() {
             ListEmptyComponent={<Text style={[styles.emptyText, {color: currentTheme.faded}]}>No tasks found.</Text>}
           />
         </Animated.View>
-
         {/* Floating Add Button */}
         {!showInput && (
           <TouchableOpacity style={[styles.fab, {backgroundColor: currentTheme.fab, shadowColor: currentTheme.text}]} onPress={() => setShowInput(true)}>
@@ -403,7 +410,6 @@ export default function Index() {
             </TouchableOpacity>
           </Animated.View>
         )}
-
         {/* Animated Modal */}
         <Modal
           visible={modalVisible}
@@ -437,11 +443,6 @@ export default function Index() {
           </View>
         </Modal>
       </KeyboardAvoidingView>
-      {/* Footer outside KeyboardAvoidingView so it always sticks to bottom */}
-      <View pointerEvents="none" style={[styles.footer, {backgroundColor: currentTheme.footer}]}> 
-        <Text style={[styles.footerText, {color: currentTheme.footerText}]}>Developed By - Nishant Wale</Text>
-      </View>
-
       {/* Toast Popup */}
       {toast.visible && (
         <Animated.View pointerEvents="none" style={{
@@ -472,6 +473,7 @@ export default function Index() {
       )}
     </SafeAreaView>
   );
+}
 }
 
 
@@ -680,22 +682,5 @@ const styles = StyleSheet.create({
     height: 22,
     borderColor : 'black'
   },
-  footer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 100,
-    // pointerEvents: 'none' is set on the View directly
-  },
-  footerText: {
-    color: '#888',
-    fontSize: 15,
-    fontWeight: 'bold',
-    letterSpacing: 0.5
-  }
+  // ...existing code...
 });

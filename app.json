@@ -4,7 +4,7 @@
     "slug": "crud-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/todo.png",
+    "icon": "./assets/images/Notepad.png",
     "scheme": "crudapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/todo.png",
+        "foregroundImage": "./assets/images/Notepad.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/todo.png",
+          "image": "./assets/images/Notepad.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
