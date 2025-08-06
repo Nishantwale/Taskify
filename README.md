@@ -1,22 +1,51 @@
-# Welcome to your Expo app 👋
+# 📱 Welcome to Taskify - A Smart TODO and Reminder App 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is an [Expo](https://expo.dev) project scaffolded using [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+## 📦 Getting Started
 
-1. Install dependencies
+Follow these steps to get the project up and running:
 
-   ```bash
-   npm install
-   ```
+### 1. Install Dependencies
 
-2. Start the app
+```bash
+npm install
+```
 
-   ```bash
-   npx expo start
-   ```
+### 2. Start the App
 
-In the output, you'll find options to open the app in a
+```bash
+npx expo start
+```
+
+Once started, you'll see options to open the app in:
+
+📱 Expo Go – Try out your app on your physical device.
+
+📱 Android Emulator
+
+🍏 iOS Simulator
+
+⚙️ Development Builds
+
+### 🛠 Start Developing
+Begin editing files in the app directory. This project uses file-based routing powered by [Expo Router](https://docs.expo.dev/router/introduction/).
+
+
+### 🧹 Reset the Project
+To start fresh with a clean slate:
+```bash
+npm run reset-project
+```
+
+This command will:
+
+- Move the current starter code to the **app-example** directory
+
+- Create a new blank **app** directory for your fresh development
+
+
+### In the output, you'll find options to open the app in a
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
@@ -25,15 +54,11 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
 
-When you're ready, run:
+### 💡 Tips
+- You can press Ctrl + C to stop the Expo development server at any time.
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- To open your app on a real device, scan the QR code using Expo Go (available on Play Store or App Store).
 
 ## Learn more
 
