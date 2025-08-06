@@ -116,7 +116,7 @@ export default function Index() {
             body: trimmed,
             sound: true,
           },
-          trigger: new Date(scheduledTimestamp)
+          trigger: { type: 'date', date: new Date(scheduledTimestamp) }
         });
         notificationId = id;
       }

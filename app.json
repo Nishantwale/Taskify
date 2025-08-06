@@ -17,7 +17,11 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.nishantapp123.crudapp"
+      "package": "com.nishantapp123.crudapp",
+      "permissions": [
+        "POST_NOTIFICATIONS",
+        "SCHEDULE_EXACT_ALARM"
+      ]
     },
     "web": {
       "bundler": "metro",
